@@ -29,20 +29,19 @@ def main():
         parser.error("watermark %s does not exist." % wm)
     encode(img, wm, res, alpha)
 
-
 def encode(img_path, wm_path, res_path, alpha):
     img = cv2.imread(img_path)
     img_f = np.fft.fft2(img)
     height, width, channel = np.shape(img)
     watermark = cv2.imread(wm_path)
     wm_height, wm_width = watermark.shape[0], watermark.shape[1]
-    x, y = range(height / 2), range(width)
+    x, y = list(range(int(height / 2))), list(range(int(width)))
     random.seed(height + width)
     random.shuffle(x)
     random.shuffle(y)
     tmp = np.zeros(img.shape)
-    for i in range(height / 2):
-        for j in range(width):
+    for i in range(int(height / 2)):
+        for j in range(int(width)):
             if x[i] < wm_height and y[j] < wm_width:
                 tmp[i][j] = watermark[x[i]][y[j]]
                 tmp[height - 1 - i][width - 1 - j] = tmp[i][j]
